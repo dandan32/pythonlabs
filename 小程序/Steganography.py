@@ -4,6 +4,7 @@
 from PIL import Image
 
 """
+图片隐写术
 功能：
 1. 存储文本到图像中
     原理
@@ -27,6 +28,7 @@ from PIL import Image
     jpg是有损压缩存储方式
     要用png等无损方式存储（png是无损压缩）
 """
+
 def string2binary(data):
     """
     make string to binary code
@@ -151,9 +153,7 @@ def decodeDataInImage(image):
     locationDoubleNull = binary_str.find('0000000000000000')
     endIndex = locationDoubleNull + (
     8 - (locationDoubleNull % 8)) if locationDoubleNull % 8 != 0 else locationDoubleNull
-    print(binary_str)
     data = binaryToString(binary_str[0:endIndex])
-    print('abc',data)
     return data
 
 

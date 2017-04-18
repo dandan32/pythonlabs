@@ -1,39 +1,23 @@
 #!/usr/bin/env python
-# coding=utf-8
-# author:dandan<pipidingdingting@163.com>
-
-# 从实验楼学习的项目
-# Pic2CharPic.py <file>  -height <h> -weight <w> -o <target>
-
-
-
-
-
-
-
-#################################
-# key point
-# rgb 转灰度值：
-# gray = 0.2126 * r + 0.7152 * g + 0.0722 * b
-#################################
+#-*- coding:utf-8 -*-
 from PIL import Image
-import argparse
-#命令行输入参数处理
-parser = argparse.ArgumentParser()
-parser.add_argument('file')     #输入文件
-parser.add_argument('-o', '--output')   #输出文件
-parser.add_argument('--width', type = int, default = 80) #输出字符画宽
-parser.add_argument('--height', type = int, default = 80) #输出字符画高
-#获取参数
-args = parser.parse_args()
-IMG = args.file
-WIDTH = args.width
-HEIGHT = args.height
-OUTPUT = args.output
-# the char set using in the char picture(70 elements)
+
+"""
+功能：
+将图片转换为字符画
+
+rgb 转灰度值公式：
+gray = 0.2126 * r + 0.7152 * g + 0.0722 * b
+"""
+
+
 ascii_char = list("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ")
-# mapping the rgb color to the ascii_char set
+
+
 def get_char(r,g,b,alpha = 256):
+    """
+    将rgb映射到字符
+    """
     if alpha == 0:
         return ' '
     length = len(ascii_char)
@@ -43,24 +27,21 @@ def get_char(r,g,b,alpha = 256):
     return ascii_char[int(gray/unit)]
 
 
-if __name__ == '__main__':
-
-    im = Image.open(IMG)
-    im = im.resize((WIDTH,HEIGHT), Image.NEAREST)
-
+def parseimg(img, width, height, file):
+    """
+    将图片转换为字符画
+    """
+    im = Image.open(img)
+    im = im.resize((width,height), Image.NEAREST)
     txt = ""
 
-    for i in range(HEIGHT):
-        for j in range(WIDTH):
+    for i in range(height):
+        for j in range(width):
             txt += get_char(*im.getpixel((j,i)))
         txt += '\n'
+    
+    with open(file,'w') as f:
+        f.write(txt)
 
-    print txt
 
-    #字符画输出到文件
-    if OUTPUT:
-        with open(OUTPUT,'w') as f:
-            f.write(txt)
-    else:
-        with open("output.txt",'w') as f:
-            f.write(txt)
+
